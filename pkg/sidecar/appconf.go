@@ -32,6 +32,11 @@ import (
 // RunConfigCommand generates my.cnf, client.cnf and 10-dynamic.cnf files.
 // nolint: gocyclo
 func RunConfigCommand(cfg *Config) error {
+
+	defer func() {
+		os.Chown("/etc/mysql", 999, 999)
+	}()
+
 	log.Info("configuring server", "host", cfg.Hostname)
 	var err error
 
@@ -43,7 +48,7 @@ func RunConfigCommand(cfg *Config) error {
 		return fmt.Errorf("copy file %s: %s", shPreStop, err)
 	}
 
-	if err = os.Mkdir(confDPath, os.FileMode(0777)); err != nil {
+	if err = os.Mkdir(confDPath, os.FileMode(0755)); err != nil {
 		if !os.IsExist(err) {
 			return fmt.Errorf("error mkdir %s/conf.d: %s", configDir, err)
 		}

@@ -129,7 +129,7 @@ func (s *sfsSyncer) SyncFn(in runtime.Object) error {
 }
 
 func (s *sfsSyncer) ensurePodSpec() core.PodSpec {
-	fsGroup := int64(999) // mysql user UID
+	fsGroup := int64(1000) // mysql user UID
 	return core.PodSpec{
 		InitContainers: s.ensureInitContainersSpec(),
 		Containers:     s.ensureContainersSpec(),

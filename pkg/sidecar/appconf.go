@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
 	"strconv"
 	"strings"
@@ -34,7 +35,9 @@ import (
 func RunConfigCommand(cfg *Config) error {
 
 	defer func() {
-		os.Chown("/etc/mysql", 999, 999)
+		cmd := exec.Command("chown", "-R", "mysql.mysql", "/etc/mysql")
+		cmd.Env = os.Environ()
+		fmt.Println("run: ", cmd.Run())
 	}()
 
 	log.Info("configuring server", "host", cfg.Hostname)
